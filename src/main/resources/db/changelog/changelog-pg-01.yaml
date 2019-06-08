@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 100
+      author: bart
+      changes:
+        - createTable:
+            tableName: RAW_REPORT
+            columns:
+              - column:
+                  name: DATE
+                  type: varchar(24)
+              - column:
+                  name: IMPRESSIONS
+                  type: varchar(24)
+              - column:
+                  name: CLICKS
+                  type: varchar(24)
+              - column:
+                  name: EARNING
+                  type: varchar(24)
+              - column:
+                  name: HASH
+                  type: varchar(24)
