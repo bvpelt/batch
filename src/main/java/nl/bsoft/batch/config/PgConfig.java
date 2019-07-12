@@ -2,6 +2,8 @@ package nl.bsoft.batch.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -25,22 +27,20 @@ import java.util.Properties;
         entityManagerFactoryRef = "entityManagerFactoryPg",
         transactionManagerRef = "transactionManagerPg")
 @EnableTransactionManagement
-public class PgConfig {
+public class PgConfig extends DbConfig {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PgConfig.class);
 
     @Bean(name = "transactionManagerPg")
-    //@Primary
     public PlatformTransactionManager transactionManagerPg() {
         return new JpaTransactionManager(entityManagerFactoryPg().getObject());
     }
 
     @Bean(name = "entityManagerFactoryPg")
-    //@Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryPg() {
 
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        //factoryBean.setDataSource(dataSourcePg());
 
         factoryBean.setDataSource(dataSourcePg(dataSourcePropertiesPg()));
 
@@ -52,17 +52,6 @@ public class PgConfig {
 
         return factoryBean;
     }
-
-    /*
-    //@Primary
-    @Bean(name = "dataSourcePg")
-    @ConfigurationProperties(prefix = "datasourcepg")
-    public DataSource dataSourcePg() {
-        return DataSourceBuilder
-                .create()
-                .build();
-    }
-     */
 
 
     @Bean
@@ -90,24 +79,10 @@ public class PgConfig {
         return new LiquibaseProperties();
     }
 
-   // @Bean("liquibase")
-    public SpringLiquibase secondaryLiquibase() {
-        //return springLiquibase(dataSourcePg(), secondaryLiquibaseProperties());
 
+    public SpringLiquibase secondaryLiquibase() {
         return springLiquibase(dataSourcePg(dataSourcePropertiesPg()), secondaryLiquibaseProperties());
     }
 
-    private static SpringLiquibase springLiquibase(DataSource dataSource, LiquibaseProperties properties) {
-        SpringLiquibase liquibase = new SpringLiquibase();
-        liquibase.setDataSource(dataSource);
-        liquibase.setChangeLog(properties.getChangeLog());
-        liquibase.setContexts(properties.getContexts());
-        liquibase.setDefaultSchema(properties.getDefaultSchema());
-        liquibase.setDropFirst(properties.isDropFirst());
-        liquibase.setShouldRun(properties.isEnabled());
-        liquibase.setLabels(properties.getLabels());
-        liquibase.setChangeLogParameters(properties.getParameters());
-        liquibase.setRollbackFile(properties.getRollbackFile());
-        return liquibase;
-    }
+
 }

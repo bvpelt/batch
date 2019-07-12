@@ -1,10 +1,12 @@
 package nl.bsoft.batch.model.pg;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
 import java.util.Objects;
 
@@ -14,7 +16,9 @@ public class ReportPg {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportPg.class);
 
     @javax.persistence.Id
-    @Column(name = "ID")
+    @Column(name = "id")
+    @GenericGenerator(name = "generator", strategy = "sequence-identity")
+    @GeneratedValue(generator = "generator")
     private long Id;
 
     @Column(name = "DATE")
@@ -109,6 +113,6 @@ public class ReportPg {
 
     @Override
     public int hashCode() {
-        return Objects.hash(Id, Date, Impressions, Clicks, Earning);
+        return Objects.hash(Date, Impressions, Clicks, Earning);
     }
 }

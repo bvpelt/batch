@@ -1,11 +1,10 @@
 package nl.bsoft.batch.model.h2;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity(name = "ReportH2")
@@ -15,6 +14,8 @@ public class ReportH2 {
 
     @javax.persistence.Id
     @Column(name = "ID")
+    @GenericGenerator(name = "generator", strategy = "sequence-identity")
+    @GeneratedValue(generator = "generator")
     private long Id;
 
     @Column(name = "DATE")
