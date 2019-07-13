@@ -1,5 +1,6 @@
 package nl.bsoft.batch.model.pg;
 
+import nl.bsoft.batch.util.CryptoHash;
 import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import java.util.Objects;
 @Entity(name = "ReportPg")
 @Table(name = "REPORTPG")
 public class ReportPg {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReportPg.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReportPg.class);
 
     @javax.persistence.Id
     @Column(name = "id")
@@ -94,7 +95,12 @@ public class ReportPg {
 
     @Override
     public String toString() {
-        String result = "ReportOut: " + this.Id + ", " + this.Date + ", " + this.Impressions + ", " + this.Clicks + ", " + this.Earning + ", " + this.Hash;
+        String result = "ReportOut: " + this.Id + ", " + functionalString() + ", " + this.Hash;
+        return result;
+    }
+
+    private String functionalString() {
+        String result = this.Date + ", " + this.Impressions + ", " + this.Clicks + ", " + this.Earning;
         return result;
     }
 
@@ -114,5 +120,17 @@ public class ReportPg {
     @Override
     public int hashCode() {
         return Objects.hash(Date, Impressions, Clicks, Earning);
+    }
+
+    public String calcHash() {
+        String result = null;
+
+        CryptoHash ch = new CryptoHash();
+        try {
+            result = ch.getHash(functionalString());
+        } catch (Exception e) {
+            logger.error("Problem calculating hash: {}", e);
+        }
+        return result;
     }
 }

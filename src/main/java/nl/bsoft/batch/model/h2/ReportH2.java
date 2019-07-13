@@ -4,7 +4,10 @@ import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity(name = "ReportH2")
@@ -99,5 +102,6 @@ public class ReportH2 {
     public int hashCode() {
         return Objects.hash(Id, Date, Impressions, Clicks, Earning);
     }
+
 }
 
