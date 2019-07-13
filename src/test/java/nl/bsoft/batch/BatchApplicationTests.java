@@ -62,7 +62,7 @@ public class BatchApplicationTests {
         }
         logger.info("End   test: {}", name.getMethodName());
     }
-    
+
     @Test
     public void storeReportPg() {
         logger.info("Start test: {}", name.getMethodName());
